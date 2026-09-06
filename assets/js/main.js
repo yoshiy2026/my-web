@@ -169,4 +169,20 @@
 
     sections.forEach(function (s) { spy.observe(s); });
   }
+
+  /* ---------- よくあるご質問（アコーディオン） ---------- */
+  var faqList = document.getElementById('faqList');
+
+  if (faqList) {
+    // JS が動く環境でだけ折りたたむ（動かない場合は開いた状態で読めるようにする）
+    faqList.classList.add('is-enhanced');
+
+    faqList.querySelectorAll('.faq-item__q').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = btn.parentElement.parentElement; // .faq-item__head -> .faq-item
+        var isOpen = item.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    });
+  }
 })();
