@@ -19,6 +19,23 @@
 </head>
 <body>
 
+<!-- ================================================================
+     ▼▼▼ 予約システムの設定（ここだけを書き換えてください）▼▼▼
+
+     STORES 予約などで予約ページを作成したら、下の RESERVE_URL の
+     " " の中を、発行された予約ページの URL に置き換えて保存します。
+     ページ内の「初回オンライン相談を予約する」ボタン（全6か所）が
+     まとめて新しい予約ページに切り替わります。
+
+     ※ 手順は「予約システム導入ガイド.docx」をご覧ください。
+     ※ " " の中の URL 以外は消さないでください。
+     ================================================================ -->
+<script>
+  window.RESERVE_URL = "https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&prof_id=51";
+</script>
+<!-- ▲▲▲ 予約システムの設定はここまで ▲▲▲ -->
+
+
 <!-- ============ ローディング ============ -->
 <div class="loader" id="loader">
   <div class="loader__inner">
@@ -41,7 +58,7 @@
     <nav class="gnav" id="gnav" aria-label="メインメニュー">
       <ul class="gnav__list">
         <li><a href="#concept" class="gnav__link"><span class="gnav__en">Concept</span><span class="gnav__ja">コンセプト</span></a></li>
-        <li><a href="#worry" class="gnav__link"><span class="gnav__en">Worry</span><span class="gnav__ja">お悩み</span></a></li>
+        <li><a href="#worry" class="gnav__link"><span class="gnav__en">Reason&nbsp;for&nbsp;visit</span><span class="gnav__ja">ご相談内容</span></a></li>
         <li><a href="#feature" class="gnav__link"><span class="gnav__en">Feature</span><span class="gnav__ja">特徴</span></a></li>
         <li><a href="#profile" class="gnav__link"><span class="gnav__en">Profile</span><span class="gnav__ja">プロフィール</span></a></li>
         <li><a href="#voice" class="gnav__link"><span class="gnav__en">Voice</span><span class="gnav__ja">利用者の声</span></a></li>
@@ -49,7 +66,7 @@
         <li><a href="#price" class="gnav__link"><span class="gnav__en">Price</span><span class="gnav__ja">料金・予約</span></a></li>
         <li><a href="#faq" class="gnav__link"><span class="gnav__en">FAQ</span><span class="gnav__ja">よくある質問</span></a></li>
       </ul>
-      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" class="gnav__cta">初回オンライン相談を予約する</a>
+      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="gnav__cta">初回オンライン相談を予約する</a>
     </nav>
 
     <button class="hamburger" id="hamburger" aria-label="メニューを開く" aria-expanded="false" aria-controls="gnav">
@@ -84,7 +101,7 @@
         そんな時間と場を、ともに育んでいきたいと思っています。
       </p>
       <div class="hero__actions">
-        <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" class="btn btn--primary">
+        <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="btn btn--primary">
           <span>初回オンライン相談を予約する</span>
         </a>
         <a href="#concept" class="btn btn--ghost"><span>Loko Pono について</span></a>
@@ -153,12 +170,12 @@
   </div>
 </section>
 
-<!-- ============ 3. お悩み ============ -->
+<!-- ============ 3. ご相談内容 ============ -->
 <section class="section worry" id="worry">
   <div class="worry__bg" aria-hidden="true"></div>
   <div class="container">
     <header class="sec-head" data-anim>
-      <p class="sec-head__en">Worry</p>
+      <p class="sec-head__en">Reason for visit</p>
       <h2 class="sec-head__ja">こんなお悩みは<br class="sp-only">ありませんか？</h2>
     </header>
 
@@ -256,7 +273,8 @@
         <ul class="data-list">
           <li>臨床スピリチュアルケア師（日本スピリチュアルケア学会）</li>
           <li>国家資格　キャリアコンサルタント</li>
-          <li>グリーフ専門士／ペットロス専門士／プロフェッショナル心理カウンセラー</li>
+          <li>日本グリーフ専門士協会認定　グリーフカウンセラー／ペットロスカウンセラー</li>
+          <li>全国心理業連合会認定　プロフェッショナルカウンセラー／SNSカウンセラー</li>
           <li>上智大学　心理学科卒業</li>
           <li>小学校児童英語教師資格</li>
         </ul>
@@ -325,7 +343,7 @@
     </ul>
 
     <div class="voice__action" data-anim>
-      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" class="btn btn--primary">
+      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="btn btn--primary">
         <span>初回オンライン相談を予約する</span>
       </a>
     </div>
@@ -518,7 +536,7 @@
         話しはじめる言葉が見つからなくても大丈夫です。<br>
         沈黙も含めて、あなたのペースでご一緒します。
       </p>
-      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" class="btn btn--primary btn--lg">
+      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="btn btn--primary btn--lg">
         <span>初回オンライン相談を予約する</span>
       </a>
       <p class="cta__note">初回 60分 / 3,500円　｜　オンライン（全国どこからでも）</p>
@@ -540,7 +558,7 @@
     <nav class="footer__nav" aria-label="フッターメニュー">
       <ul>
         <li><a href="#concept">コンセプト</a></li>
-        <li><a href="#worry">お悩み</a></li>
+        <li><a href="#worry">ご相談内容</a></li>
         <li><a href="#feature">カウンセリングの特徴</a></li>
         <li><a href="#profile">カウンセラー紹介</a></li>
         <li><a href="#voice">ご利用いただいた方々の声</a></li>
@@ -552,7 +570,7 @@
         <li><a href="#">特定商取引法に基づく表記</a></li>
         <li><a href="#">プライバシーポリシー</a></li>
         <li><a href="#">お問い合わせフォーム</a></li>
-        <li><a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener">オンライン相談のご予約</a></li>
+        <li><a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve>オンライン相談のご予約</a></li>
       </ul>
     </nav>
   </div>
@@ -561,11 +579,24 @@
 
 <!-- ============ スマホ固定CTA ============ -->
 <div class="fixed-cta" id="fixedCta">
-  <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener">
+  <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve>
     初回オンライン相談を予約する
   </a>
 </div>
 
+<script>
+  /* 上部の RESERVE_URL を、予約ボタン（data-reserve）すべてに反映します */
+  (function () {
+    var url = (window.RESERVE_URL || "").trim();
+    if (!url) return;
+    var links = document.querySelectorAll("a[data-reserve]");
+    for (var i = 0; i < links.length; i++) {
+      links[i].setAttribute("href", url);
+      links[i].setAttribute("target", "_blank");
+      links[i].setAttribute("rel", "noopener");
+    }
+  })();
+</script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -264,6 +264,7 @@ em{ font-style:normal; }
   font-family:var(--f-en);
   font-size:13px; letter-spacing:.14em;
   color:var(--c-tq-deep);
+  white-space:nowrap;
 }
 .gnav__ja{ font-size:10.5px; letter-spacing:.1em; color:var(--c-ink-mid); }
 .gnav__link::after{
@@ -1506,8 +1507,8 @@ em{ font-style:normal; }
   }
 }
 
-/* ---- ナビ項目が増えたぶんの詰め（1081〜1240px） ---- */
-@media screen and (min-width:1081px) and (max-width:1240px){
+/* ---- ナビ項目が増えたぶんの詰め（1081〜1400px） ---- */
+@media screen and (min-width:1081px) and (max-width:1400px){
   .gnav{ gap:16px; }
   .gnav__list{ gap:13px; }
   .gnav__en{ font-size:12px; }
