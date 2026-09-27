@@ -18,6 +18,7 @@
   var header   = document.getElementById('header');
   var fixedCta = document.getElementById('fixedCta');
   var hero     = document.getElementById('hero');
+  var reserve  = document.getElementById('reserve');
   var ticking  = false;
 
   function onScroll() {
@@ -26,9 +27,14 @@
     if (header) header.classList.toggle('is-scrolled', y > 60);
 
     if (fixedCta) {
-      // ファーストビューを抜けたら固定CTAを出す
+      // ファーストビューを抜けたら固定CTAを出す（フォームが見えている間は隠す）
       var threshold = hero ? hero.offsetHeight * 0.7 : 500;
-      fixedCta.classList.toggle('is-shown', y > threshold);
+      var formInView = false;
+      if (reserve) {
+        var r = reserve.getBoundingClientRect();
+        formInView = r.top < window.innerHeight && r.bottom > 0;
+      }
+      fixedCta.classList.toggle('is-shown', y > threshold && !formInView);
     }
     ticking = false;
   }
@@ -183,6 +189,185 @@
         var isOpen = item.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       });
+    });
+  }
+
+  /* ---------- 予約希望・お問い合わせフォーム ---------- */
+  var form = document.getElementById('reserveForm');
+
+  if (form) {
+    var endpoint  = (window.FORM_ENDPOINT || '').trim();
+    var mailTo    = (window.CONTACT_EMAIL || '').trim();
+    var submitBtn = document.getElementById('rformSubmit');
+    var statusEl  = document.getElementById('rformStatus');
+    var doneEl    = document.getElementById('rformDone');
+    var date1     = document.getElementById('fDate1');
+    var reserveOnly = form.querySelectorAll('[data-for-reserve]');
+
+    // 表示用のメールアドレスを設定値にそろえる
+    if (mailTo) {
+      document.querySelectorAll('[data-contact-email]').forEach(function (el) { el.textContent = mailTo; });
+    }
+
+    function purpose() {
+      var checked = form.querySelector('input[name="ご用件"]:checked');
+      return checked ? checked.value : '';
+    }
+    function isInquiry() { return purpose() === 'お問い合わせのみ'; }
+
+    // 「お問い合わせのみ」のときは希望日時・確認事項を隠す
+    function syncPurpose() {
+      var inquiry = isInquiry();
+      reserveOnly.forEach(function (el) { el.hidden = inquiry; });
+      date1.required = !inquiry;
+    }
+    form.querySelectorAll('input[name="ご用件"]').forEach(function (r) {
+      r.addEventListener('change', syncPurpose);
+    });
+    syncPurpose();
+
+    // 全角数字を半角にし、ハイフン・空白を除いた数字だけにする
+    function telDigits(v) {
+      return v.replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
+              .replace(/[^0-9]/g, '');
+    }
+
+    var rules = [
+      { id: 'fName',  msg: 'お名前をご入力ください。' },
+      { id: 'fKana',  msg: 'フリガナをご入力ください。' },
+      { id: 'fEmail', msg: 'メールアドレスをご入力ください。',
+        check: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'メールアドレスの形式をご確認ください。'; } },
+      { id: 'fTel',   msg: '携帯電話番号をご入力ください。',
+        check: function (v) { var d = telDigits(v).length; return (d >= 10 && d <= 11) || '電話番号は10〜11桁の数字でご入力ください。'; } },
+      { id: 'fDate1', msg: 'セッションのご希望日時をご入力ください。',
+        skip: isInquiry },
+      { id: 'fAgree', msg: 'ご利用規約・キャンセルポリシーとプライバシーポリシーへの同意が必要です。', checkbox: true }
+    ];
+
+    function setError(field, message) {
+      var err = document.getElementById(field.id + '-err');
+      if (err) err.textContent = message || '';
+      if (message) field.setAttribute('aria-invalid', 'true');
+      else field.removeAttribute('aria-invalid');
+    }
+
+    function validate() {
+      var first = null;
+      rules.forEach(function (rule) {
+        var field = document.getElementById(rule.id);
+        if (!field) return;
+        var message = '';
+        if (!(rule.skip && rule.skip())) {
+          if (rule.checkbox) {
+            if (!field.checked) message = rule.msg;
+          } else {
+            var v = field.value.trim();
+            if (!v) message = rule.msg;
+            else if (rule.check) {
+              var result = rule.check(v);
+              if (result !== true) message = result;
+            }
+          }
+        }
+        setError(field, message);
+        if (message && !first) first = field;
+      });
+      return first;
+    }
+
+    // 入力し直したらエラー表示を消す
+    rules.forEach(function (rule) {
+      var field = document.getElementById(rule.id);
+      if (!field) return;
+      field.addEventListener(rule.checkbox ? 'change' : 'input', function () {
+        if (field.getAttribute('aria-invalid') === 'true') setError(field, '');
+      });
+    });
+
+    function setStatus(html, isError) {
+      statusEl.innerHTML = html;
+      statusEl.classList.toggle('is-error', !!isError);
+    }
+
+    // 送信する項目（隠れている欄は除く）
+    function collect() {
+      var data = new FormData(form);
+      data.delete('_gotcha');
+      if (isInquiry()) {
+        data.delete('第1希望日時');
+        data.delete('第2希望日時');
+      }
+      return data;
+    }
+
+    function subjectText() {
+      return '【Loko Pono】' + purpose() + '（' + document.getElementById('fName').value.trim() + ' 様）';
+    }
+
+    function mailtoHref(data) {
+      var lines = [];
+      data.forEach(function (value, key) {
+        lines.push((key === 'email' ? 'メールアドレス' : key) + '：' + value);
+      });
+      return 'mailto:' + mailTo +
+        '?subject=' + encodeURIComponent(subjectText()) +
+        '&body=' + encodeURIComponent(lines.join('\n'));
+    }
+
+    function showDone() {
+      form.hidden = true;
+      doneEl.hidden = false;
+      doneEl.focus();
+    }
+
+    function fallbackMessage(data) {
+      return '送信できませんでした。お手数ですが、<a href="' + mailtoHref(data) + '">こちら</a>から、または ' +
+        mailTo + ' 宛てに直接メールでご連絡ください。';
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      setStatus('');
+
+      var firstInvalid = validate();
+      if (firstInvalid) {
+        firstInvalid.focus();
+        setStatus('入力内容をご確認ください。', true);
+        return;
+      }
+
+      // 迷惑メール対策の隠し欄に入力がある場合は、送信したように見せて終える
+      var hp = form.querySelector('input[name="_gotcha"]');
+      if (hp && hp.value) { showDone(); return; }
+
+      var data = collect();
+
+      // 送信先が未設定のときは、メールソフトを開く
+      if (!endpoint) {
+        window.location.href = mailtoHref(data);
+        setStatus('メールソフトが開きます。内容をご確認のうえ、そのまま送信してください。<br>' +
+          '開かない場合は、お手数ですが ' + mailTo + ' 宛てに直接メールでご連絡ください。');
+        return;
+      }
+
+      data.append('_subject', subjectText());
+      submitBtn.disabled = true;
+      setStatus('送信しています…');
+
+      fetch(endpoint, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+        .then(function (res) {
+          if (!res.ok) throw new Error('status ' + res.status);
+          setStatus('');
+          form.reset();
+          syncPurpose();
+          showDone();
+        })
+        .catch(function () {
+          setStatus(fallbackMessage(data), true);
+        })
+        .then(function () {
+          submitBtn.disabled = false;
+        });
     });
   }
 })();

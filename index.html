@@ -20,20 +20,27 @@
 <body>
 
 <!-- ================================================================
-     ▼▼▼ 予約システムの設定（ここだけを書き換えてください）▼▼▼
+     ▼▼▼ お申し込みフォームの設定（ここだけを書き換えてください）▼▼▼
 
-     STORES 予約などで予約ページを作成したら、下の RESERVE_URL の
-     " " の中を、発行された予約ページの URL に置き換えて保存します。
-     ページ内の「初回オンライン相談を予約する」ボタン（全6か所）が
-     まとめて新しい予約ページに切り替わります。
+     FORM_ENDPOINT
+       フォームの送信先です。Formspree（無料）でフォームを作成すると
+       「https://formspree.io/f/xxxxxxxx」という URL が発行されるので、
+       " " の中に貼り付けて保存します。
+       空のままの場合は、送信ボタンを押すと、お客さまのメールソフトが
+       入力内容入りで開く方式になります（メールソフトを設定していない
+       パソコンでは送れないことがあるため、公開前の設定をおすすめします）。
 
-     ※ 手順は「予約システム導入ガイド.docx」をご覧ください。
-     ※ " " の中の URL 以外は消さないでください。
+     CONTACT_EMAIL
+       お申し込みを受け取るメールアドレスです。
+
+     ※ 手順は「お申し込みフォーム設定ガイド.docx」をご覧ください。
+     ※ " " の中以外は消さないでください。
      ================================================================ -->
 <script>
-  window.RESERVE_URL = "https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&prof_id=51";
+  window.FORM_ENDPOINT = "";
+  window.CONTACT_EMAIL = "hiroko.goma@gmail.com";
 </script>
-<!-- ▲▲▲ 予約システムの設定はここまで ▲▲▲ -->
+<!-- ▲▲▲ お申し込みフォームの設定はここまで ▲▲▲ -->
 
 
 <!-- ============ ローディング ============ -->
@@ -66,7 +73,7 @@
         <li><a href="#price" class="gnav__link"><span class="gnav__en">Price</span><span class="gnav__ja">料金・予約</span></a></li>
         <li><a href="#faq" class="gnav__link"><span class="gnav__en">FAQ</span><span class="gnav__ja">よくある質問</span></a></li>
       </ul>
-      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="gnav__cta">初回オンライン相談を予約する</a>
+      <a href="#reserve" data-reserve class="gnav__cta">初回オンライン相談を申し込む</a>
     </nav>
 
     <button class="hamburger" id="hamburger" aria-label="メニューを開く" aria-expanded="false" aria-controls="gnav">
@@ -101,8 +108,8 @@
         そんな時間と場を、ともに育んでいきたいと思っています。
       </p>
       <div class="hero__actions">
-        <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="btn btn--primary">
-          <span>初回オンライン相談を予約する</span>
+        <a href="#reserve" data-reserve class="btn btn--primary">
+          <span>初回オンライン相談を申し込む</span>
         </a>
         <a href="#concept" class="btn btn--ghost"><span>Loko Pono について</span></a>
       </div>
@@ -343,8 +350,8 @@
     </ul>
 
     <div class="voice__action" data-anim>
-      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="btn btn--primary">
-        <span>初回オンライン相談を予約する</span>
+      <a href="#reserve" data-reserve class="btn btn--primary">
+        <span>初回オンライン相談を申し込む</span>
       </a>
     </div>
   </div>
@@ -418,25 +425,52 @@
       </li>
     </ul>
 
+    <div class="schedule" data-anim>
+      <h3 class="schedule__title"><span class="schedule__en">Schedule</span>ご予約いただける日時</h3>
+      <ul class="schedule__list">
+        <li class="schedule__item">
+          <span class="schedule__day">月曜日</span>
+          <span class="schedule__time">20:00〜21:00</span>
+        </li>
+        <li class="schedule__item">
+          <span class="schedule__day">土曜日</span>
+          <span class="schedule__time">10:00〜11:00</span>
+        </li>
+        <li class="schedule__item schedule__item--other">
+          <span class="schedule__day">その他の日時</span>
+          <span class="schedule__time">メールにてご相談ください</span>
+        </li>
+      </ul>
+    </div>
+
     <div class="flow" data-anim>
       <h3 class="flow__title"><span class="flow__en">Flow</span>ご予約の流れ</h3>
       <ol class="flow__list">
         <li class="flow-step">
           <span class="flow-step__num">STEP<b>1</b></span>
-          <h4>ご希望の日時を選ぶ</h4>
-          <p>予約ボタンから、ご希望の日時をお選びください。</p>
+          <h4>フォームから<br class="pc-only">お申し込み</h4>
+          <p>「予約希望・お問い合わせフォーム」に、お名前・ご希望日時・ご連絡先をご記入のうえ送信してください。</p>
         </li>
         <li class="flow-step">
           <span class="flow-step__num">STEP<b>2</b></span>
-          <h4>自動返信メールを確認</h4>
-          <p>当日のオンライン相談用リンクなど、詳細をご連絡します。</p>
+          <h4>メールで<br class="pc-only">日程を確定</h4>
+          <p>こちらからメールでご連絡し、日程を調整・確定します。</p>
         </li>
         <li class="flow-step">
           <span class="flow-step__num">STEP<b>3</b></span>
-          <h4>当日、お話しする</h4>
-          <p>お時間になりましたら、リラックスしてご参加ください。</p>
+          <h4>お振込みで<br class="pc-only">ご予約確定</h4>
+          <p>お振込先をご案内します。ご入金を確認した時点で、ご予約の確定となります。</p>
+        </li>
+        <li class="flow-step">
+          <span class="flow-step__num">STEP<b>4</b></span>
+          <h4>ZoomのURLを<br class="pc-only">お知らせ</h4>
+          <p>当日ご参加いただく Zoom の URL をメールでお送りします。お時間になりましたら、リラックスしてご参加ください。</p>
         </li>
       </ol>
+      <p class="flow__note">
+        お支払いは銀行振込（事前）です。お支払い期限はご予約前日の20:00までとなります。<br class="pc-only">
+        キャンセル・日程変更については<a href="terms.html#cancel">キャンセルポリシー</a>をご確認ください。
+      </p>
     </div>
   </div>
 </section>
@@ -512,7 +546,23 @@
         <div class="faq-item__a" id="faqA4" role="region" aria-labelledby="faqQ4">
           <div class="faq-item__a-inner">
             <span class="faq-item__mark faq-item__mark--a" aria-hidden="true">A.</span>
-            <p>お話しいただいた内容の秘密は厳守いたします。ご本人の同意なく、ご家族を含む第三者にお伝えすることはありません。ただし、ご自身や他の方の生命に関わる危険があると判断される場合に限り、必要な範囲で関係機関と連携させていただくことがあります。</p>
+            <p>お話しいただいた内容の秘密は厳守いたします。ご本人の同意なく、ご家族を含む第三者にお伝えすることはありません。ただし、ご自身や他の方の生命・身体に危険が差し迫っていると判断される場合や、法令に基づく場合に限り、必要な範囲で関係機関と連携させていただくことがあります。</p>
+          </div>
+        </div>
+      </li>
+
+      <li class="faq-item" data-anim>
+        <h3 class="faq-item__head">
+          <button type="button" class="faq-item__q" id="faqQ5" aria-expanded="false" aria-controls="faqA5">
+            <span class="faq-item__mark" aria-hidden="true">Q.</span>
+            <span class="faq-item__text">予約のキャンセルや日程変更はできますか？</span>
+            <span class="faq-item__icon" aria-hidden="true"></span>
+          </button>
+        </h3>
+        <div class="faq-item__a" id="faqA5" role="region" aria-labelledby="faqQ5">
+          <div class="faq-item__a-inner">
+            <span class="faq-item__mark faq-item__mark--a" aria-hidden="true">A.</span>
+            <p>ご予約前日の20:00までにメールでご連絡いただければ、キャンセル料はかかりません。日程の変更も1回まで無料で承ります。前日20:00以降のキャンセルは料金の50%、ご連絡のないキャンセルは料金の全額を申し受けます。ご本人やご家族の急な体調不良など、やむを得ない事情のときは、ご遠慮なくお知らせください。詳しくは<a href="terms.html#cancel">キャンセルポリシー</a>をご覧ください。</p>
           </div>
         </div>
       </li>
@@ -520,26 +570,120 @@
 
     <p class="faq__foot" data-anim>
       <span class="faq__leaf" aria-hidden="true"></span>
-      その他のご不明点があれば、お気軽にお問い合わせください。
+      その他のご不明点があれば、<a href="#reserve">お問い合わせフォーム</a>からお気軽にお問い合わせください。
     </p>
   </div>
 </section>
 
-<!-- ============ CTA ============ -->
-<section class="cta" id="contact">
+<!-- ============ 予約希望・お問い合わせフォーム ============ -->
+<section class="cta reserve" id="reserve">
   <div class="cta__light" aria-hidden="true"></div>
   <div class="container">
     <div class="cta__inner" data-anim>
-      <p class="cta__en">Reservation</p>
+      <p class="cta__en">Reservation &amp; Contact</p>
       <h2 class="cta__title">まずは、<br class="sp-only">お話を聞かせてください。</h2>
       <p class="cta__text">
         話しはじめる言葉が見つからなくても大丈夫です。<br>
         沈黙も含めて、あなたのペースでご一緒します。
       </p>
-      <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve class="btn btn--primary btn--lg">
-        <span>初回オンライン相談を予約する</span>
-      </a>
-      <p class="cta__note">初回 60分 / 3,500円　｜　オンライン（全国どこからでも）</p>
+      <ul class="reserve__days" aria-label="ご予約いただける日時">
+        <li>月曜 20:00〜21:00</li>
+        <li>土曜 10:00〜11:00</li>
+        <li>その他の日時はメールにて応相談</li>
+      </ul>
+    </div>
+
+    <div class="rform-wrap" data-anim>
+      <h3 class="rform-wrap__title">予約希望・お問い合わせフォーム</h3>
+      <p class="rform-wrap__lead">
+        送信いただいた時点では、ご予約は確定しません。内容を確認のうえ、<br class="pc-only">
+        3日以内に <span class="rform-wrap__mail" data-contact-email>hiroko.goma@gmail.com</span> からメールでご連絡いたします。
+      </p>
+
+      <form class="rform" id="reserveForm" novalidate>
+        <!-- 迷惑メール対策（人には見えない欄。入力があれば送信しません） -->
+        <div class="rform__hp" aria-hidden="true">
+          <label>この欄は空欄のままにしてください<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <fieldset class="rform__row rform__row--radio">
+          <legend class="rform__label">ご用件<span class="rform__req">必須</span></legend>
+          <div class="rform__choices">
+            <label class="rform__choice"><input type="radio" name="ご用件" value="初回オンライン相談の予約希望" checked><span>初回オンライン相談の予約希望（60分 3,500円）</span></label>
+            <label class="rform__choice"><input type="radio" name="ご用件" value="継続オンライン相談の予約希望"><span>継続オンライン相談の予約希望（60分 5,000円）</span></label>
+            <label class="rform__choice"><input type="radio" name="ご用件" value="お問い合わせのみ"><span>お問い合わせのみ</span></label>
+          </div>
+        </fieldset>
+
+        <div class="rform__grid">
+          <div class="rform__row">
+            <label class="rform__label" for="fName">お名前<span class="rform__req">必須</span></label>
+            <input class="rform__input" type="text" id="fName" name="お名前" autocomplete="name" placeholder="例：山田 花子" required aria-describedby="fName-err">
+            <p class="rform__error" id="fName-err"></p>
+          </div>
+          <div class="rform__row">
+            <label class="rform__label" for="fKana">フリガナ<span class="rform__req">必須</span></label>
+            <input class="rform__input" type="text" id="fKana" name="フリガナ" placeholder="例：ヤマダ ハナコ" required aria-describedby="fKana-err">
+            <p class="rform__error" id="fKana-err"></p>
+          </div>
+          <div class="rform__row">
+            <label class="rform__label" for="fEmail">メールアドレス<span class="rform__req">必須</span></label>
+            <input class="rform__input" type="email" id="fEmail" name="email" autocomplete="email" inputmode="email" placeholder="例：example@mail.com" required aria-describedby="fEmail-err">
+            <p class="rform__error" id="fEmail-err"></p>
+          </div>
+          <div class="rform__row">
+            <label class="rform__label" for="fTel">携帯電話番号<span class="rform__req">必須</span></label>
+            <input class="rform__input" type="tel" id="fTel" name="携帯電話番号" autocomplete="tel" inputmode="tel" placeholder="例：090-1234-5678" required aria-describedby="fTel-err">
+            <p class="rform__error" id="fTel-err"></p>
+          </div>
+          <div class="rform__row" data-for-reserve>
+            <label class="rform__label" for="fDate1">セッション希望日時（第1希望）<span class="rform__req">必須</span></label>
+            <input class="rform__input" type="text" id="fDate1" name="第1希望日時" placeholder="例：10月5日（月）20:00〜" required aria-describedby="fDate1-err">
+            <p class="rform__error" id="fDate1-err"></p>
+          </div>
+          <div class="rform__row" data-for-reserve>
+            <label class="rform__label" for="fDate2">セッション希望日時（第2希望）<span class="rform__opt">任意</span></label>
+            <input class="rform__input" type="text" id="fDate2" name="第2希望日時" placeholder="例：10月10日（土）10:00〜">
+          </div>
+        </div>
+
+        <div class="rform__row">
+          <label class="rform__label" for="fMsg">ご質問・ご要望<span class="rform__opt">任意</span></label>
+          <textarea class="rform__input rform__textarea" id="fMsg" name="ご質問・ご要望" rows="4" placeholder="ご質問や、ご希望日時の補足などがあればご記入ください。"></textarea>
+          <p class="rform__hint">ご相談内容の詳しいお話は、当日のセッションでうかがいます。ここには書かなくても大丈夫です。</p>
+        </div>
+
+        <div class="rform__confirm" data-for-reserve>
+          <p class="rform__confirm-title">お申し込み前にご確認ください</p>
+          <dl class="rform__terms">
+            <div><dt>料金</dt><dd>初回 60分 3,500円／継続 60分 5,000円（税込）</dd></div>
+            <div><dt>お支払い</dt><dd>銀行振込（事前）。お支払い期限はご予約前日の20:00まで。振込手数料はご負担ください</dd></div>
+            <div><dt>ご提供</dt><dd>ご予約の日時に Zoom で実施（通信料はご負担ください）</dd></div>
+            <div><dt>キャンセル</dt><dd>前日20:00まで無料／前日20:00以降・当日 50%／ご連絡なし 100%（<a href="terms.html#cancel" target="_blank" rel="noopener">詳しく見る</a>）</dd></div>
+          </dl>
+          <p class="rform__confirm-note">ご予約は、日程の確定後、ご入金を確認した時点で成立します。</p>
+        </div>
+
+        <div class="rform__row rform__agree-row">
+          <label class="rform__agree">
+            <input type="checkbox" id="fAgree" name="規約への同意" value="同意する" required aria-describedby="fAgree-err">
+            <span><a href="terms.html" target="_blank" rel="noopener">利用規約・キャンセルポリシー</a>と<a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意します。（未成年の方は、保護者の方の同意を得たうえでお申し込みください）</span>
+          </label>
+          <p class="rform__error" id="fAgree-err"></p>
+        </div>
+
+        <div class="rform__submit">
+          <button type="submit" class="btn btn--primary btn--lg" id="rformSubmit"><span>この内容で送信する</span></button>
+        </div>
+        <p class="rform__status" id="rformStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="rform-done" id="rformDone" hidden tabindex="-1">
+        <p class="rform-done__title">送信が完了しました</p>
+        <p>お申し込みいただき、ありがとうございます。<br>
+          内容を確認のうえ、3日以内に <span data-contact-email>hiroko.goma@gmail.com</span> からメールでご連絡いたします。<br>
+          数日たっても返信が届かない場合は、迷惑メールフォルダをご確認いただくか、お手数ですが上記アドレスへ直接ご連絡ください。</p>
+      </div>
     </div>
   </div>
 </section>
@@ -567,10 +711,10 @@
         <li><a href="#faq">よくあるご質問</a></li>
       </ul>
       <ul>
-        <li><a href="#">特定商取引法に基づく表記</a></li>
-        <li><a href="#">プライバシーポリシー</a></li>
-        <li><a href="#">お問い合わせフォーム</a></li>
-        <li><a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve>オンライン相談のご予約</a></li>
+        <li><a href="terms.html">利用規約・キャンセルポリシー</a></li>
+        <li><a href="tokushoho.html">特定商取引法に基づく表記</a></li>
+        <li><a href="privacy.html">プライバシーポリシー</a></li>
+        <li><a href="#reserve" data-reserve>予約希望・お問い合わせフォーム</a></li>
       </ul>
     </nav>
   </div>
@@ -579,24 +723,11 @@
 
 <!-- ============ スマホ固定CTA ============ -->
 <div class="fixed-cta" id="fixedCta">
-  <a href="https://www.ieruba.jp/WTE/site.cgi?m=prfdtlfrm&amp;prof_id=51" target="_blank" rel="noopener" data-reserve>
-    初回オンライン相談を予約する
+  <a href="#reserve" data-reserve>
+    初回オンライン相談を申し込む
   </a>
 </div>
 
-<script>
-  /* 上部の RESERVE_URL を、予約ボタン（data-reserve）すべてに反映します */
-  (function () {
-    var url = (window.RESERVE_URL || "").trim();
-    if (!url) return;
-    var links = document.querySelectorAll("a[data-reserve]");
-    for (var i = 0; i < links.length; i++) {
-      links[i].setAttribute("href", url);
-      links[i].setAttribute("target", "_blank");
-      links[i].setAttribute("rel", "noopener");
-    }
-  })();
-</script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
